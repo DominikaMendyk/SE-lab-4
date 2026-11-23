@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HRCalculatorTest {
     @Test
@@ -18,5 +17,29 @@ public class HRCalculatorTest {
     public void testInvalidMaxHR_ageTooLow() {
         assertThrows(IllegalArgumentException.class,
                 () -> HRCalculator.calculateMaxHR(-1));
+    }
+    @Test
+    public void testValidWorkoutZone() {
+        var result = HRCalculator.getWorkoutZone(25, 190);
+        assertEquals("V02 Max", result);
+    }
+    @Test
+    public void testInvalidWorkoutZone_bpmTooHigh() {
+        assertThrows(IllegalArgumentException.class,
+                () -> HRCalculator.getWorkoutZone(25, 220));
+    }
+    @Test
+    public void testInvalidWorkoutZone_bpmTooLow() {
+        assertThrows(IllegalArgumentException.class,
+                () -> HRCalculator.getWorkoutZone(25, 0));
+    }
+    @Test
+    public void testInvalidWorkoutZone_invalidAge() {
+        assertAll(
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> HRCalculator.getWorkoutZone(-1, 150)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> HRCalculator.getWorkoutZone(121, 150))
+        );
     }
 }
